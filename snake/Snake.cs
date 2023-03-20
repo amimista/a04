@@ -23,7 +23,7 @@ namespace snake
                 body.Add(new Entity(startingLeft + i, startingTop)); // setting the head of the snake, incramenting by i to display the whole thing
             }
 
-            // test
+            // test 2
         }
     }
 }
