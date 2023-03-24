@@ -65,6 +65,8 @@ namespace snake
                     IsDead = true;
                 }
             }
+
+            // test 2
         }
 
         public bool CheckIsDead(List<Entity> obstacleList)
