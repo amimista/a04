@@ -10,7 +10,7 @@ namespace snake
     {
         private int left;
         private int top;
-        private char drawnChar;
+        // properties
         public int Left { get; set; }
         public int Top { get; set; }
 
@@ -19,11 +19,10 @@ namespace snake
             Left = left;
             Top = top;
         }
-        public Entity(int left, int top, char insideChar)
+
+        public override string ToString()
         {
-            Left = left;
-            Top = top;
-            this.drawnChar = insideChar;
+            return $"ENTITY({Left}, {Top})";
         }
 
     }

@@ -1,25 +1,25 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
-
-// main while loop
-int tick = 0;
+using snake;
 bool running = true;
 
-Console.WriteLine("Press 'q' to quit the application...");
+Obstacle obstacle = new Obstacle(10, 4, 3, ConsoleColor.Cyan);
+obstacle.Display();
 
-while (true)
+Snake snake = new Snake(5, 8, 2, ConsoleColor.Green);
+snake.Display();
+
+
+while(running)
 {
-    // Read a key from the console without displaying it
-    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+    if (snake.CheckIsDead(obstacle.ObstacleList)) break;
 
-    // Check if the pressed key is 'q'
-    if (keyInfo.Key == ConsoleKey.Q)
-    {
-        break; // Exit the loop
-    }
+    snake.Move(Direction.Right);
 
-    // Perform some action based on the key press
-    Console.WriteLine($"You pressed '{keyInfo.KeyChar}'");
+    snake.Display();
+    Thread.Sleep(100);
 }
 
+Console.SetCursorPosition(0, Console.WindowHeight - 5);
+Console.ResetColor();
+Console.ForegroundColor = ConsoleColor.DarkGray;
 Console.WriteLine("Application ended.");

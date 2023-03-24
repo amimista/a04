@@ -12,9 +12,9 @@ namespace snake
     /// <author>
     /// Marcus Walker
     /// </author>
-    public class RingBuffer
+    public class RingBuffer<T>
     {
-        private Entity[] items;
+        private T[] items;
         private int front;
         private int rear;
         private int size;
@@ -22,7 +22,7 @@ namespace snake
 
         public RingBuffer(int capacity)
         {
-            items = new Entity[capacity];
+            items = new T[capacity];
             front = 0;
             rear = 0;
             size = 0;
@@ -49,7 +49,7 @@ namespace snake
             get { return size; }
         }
 
-        public void Add(Entity element)
+        public void Add(T element)
         {
             if (size == capacity)
                 throw new InvalidOperationException("Can't add to a full buffer.");
@@ -59,16 +59,38 @@ namespace snake
             size++;
         }
 
-        public Entity Remove()
+        public T Remove()
         {
             if (size == 0)
                 throw new InvalidOperationException("Can't remove from empty buffer");
 
-            Entity element = items[front];
-            items[front] = null;
+            T element = items[front];
+            items[front] = default(T);
             front = ++front % capacity;
             size--;
             return element;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (i == front)
+                {
+                    sb.Append(items[i] + "^, ");
+                }
+                else if (i == rear)
+                {
+                    sb.Append(items[i] + "%, ");
+                }
+                else
+                {
+                    sb.Append(items[i] + ", ");
+                }
+            }
+            sb.Remove(sb.Length-2,2);
+            return sb.ToString();
         }
 
     }
