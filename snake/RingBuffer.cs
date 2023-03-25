@@ -11,18 +11,19 @@ namespace snake
     /// </summary>
     /// <author>
     /// Marcus Walker
+    /// Tyson Potter
     /// </author>
-    public class RingBuffer<T>
+    public class RingBuffer<Entity>
     {
-        private T[] items;
-        private int front;
-        private int rear;
-        private int size;
-        private int capacity;
+       public Entity[] items;
+        public int front;
+        public int rear;
+        public int size;
+        public int capacity;
 
         public RingBuffer(int capacity)
         {
-            items = new T[capacity];
+            items = new Entity[capacity];
             front = 0;
             rear = 0;
             size = 0;
@@ -49,7 +50,7 @@ namespace snake
             get { return size; }
         }
 
-        public void Add(T element)
+        public void Add(Entity element)
         {
             if (size == capacity)
                 throw new InvalidOperationException("Can't add to a full buffer.");
@@ -59,13 +60,13 @@ namespace snake
             size++;
         }
 
-        public T Remove()
+        public Entity Remove()
         {
             if (size == 0)
                 throw new InvalidOperationException("Can't remove from empty buffer");
 
-            T element = items[front];
-            items[front] = default(T);
+            Entity element = items[front];
+            items[front] = default(Entity);
             front = ++front % capacity;
             size--;
             return element;
