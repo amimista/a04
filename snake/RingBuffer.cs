@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace snake
 {
@@ -13,9 +9,9 @@ namespace snake
     /// Marcus Walker
     /// Tyson Potter
     /// </author>
-    public class RingBuffer<Entity>
+    public class RingBuffer
     {
-       public Entity[] items;
+        public Entity[] items;
         public int front;
         public int rear;
         public int size;
@@ -66,7 +62,6 @@ namespace snake
                 throw new InvalidOperationException("Can't remove from empty buffer");
 
             Entity element = items[front];
-            items[front] = default(Entity);
             front = ++front % capacity;
             size--;
             return element;
@@ -90,7 +85,7 @@ namespace snake
                     sb.Append(items[i] + ", ");
                 }
             }
-            sb.Remove(sb.Length-2,2);
+            sb.Remove(sb.Length - 2, 2);
             return sb.ToString();
         }
 

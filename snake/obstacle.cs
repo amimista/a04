@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace snake
+﻿namespace snake
 {
+    /// <summary>
+    /// Representation of multiple <see cref="Entity"/> that make an obstacle in the game. Used in tandem with <see cref="Snake"/>.
+    /// </summary>
     public class Obstacle
     {
         private List<Entity> obstacleList;
@@ -27,6 +24,9 @@ namespace snake
             }
         }
 
+        /// <summary>
+        /// Displays the representation of multiple entitys as a single shape in the console.
+        /// </summary>
         public void Display()
         {
             foreach (Entity e in obstacleList)
