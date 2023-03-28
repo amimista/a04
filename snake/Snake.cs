@@ -20,33 +20,43 @@
 
         private ConsoleColor color;
         private ConsoleColor Bodycolor = ConsoleColor.Green;
+        private List<Entity> obstacleList;
 
-
-
-        public Snake(int length, int startingLeft, int startingTop, ConsoleColor color)
+        public Snake(int length, int startingLeft, int startingTop, List<Entity> obstacleList)
         {
-
+            this.obstacleList = obstacleList;
             RingBuffer body = new RingBuffer(10);
             head = new Entity(startingLeft, startingTop);
-            body1 = new Entity(startingLeft - 1, startingTop);
-            body2 = new Entity(startingLeft - 2, startingTop);
-            body3 = new Entity(startingLeft - 3, startingTop);
-            body4 = new Entity(startingLeft - 4, startingTop);
-            body5 = new Entity(startingLeft - 5, startingTop);
-            body6 = new Entity(startingLeft - 6, startingTop);
-            body7 = new Entity(startingLeft - 7, startingTop);
-            body8 = new Entity(startingLeft - 8, startingTop);
-            rear = new Entity(startingLeft - 9, startingTop);
+            body1 = new Entity(startingLeft - (1 * 2), startingTop);
+            body2 = new Entity(startingLeft - (2 * 2), startingTop);
+            body3 = new Entity(startingLeft - (3 * 2), startingTop);
+            body4 = new Entity(startingLeft - (4 * 2), startingTop);
+            body5 = new Entity(startingLeft - (5 * 2), startingTop);
+            body6 = new Entity(startingLeft - (6 * 2), startingTop);
+            body7 = new Entity(startingLeft - (7 * 2), startingTop);
+            body8 = new Entity(startingLeft - (8 * 2), startingTop);
+            rear = new Entity(startingLeft - (9 * 2), startingTop);
             body.Add(head);
+            obstacleList.Add(body1);
             body.Add(body1);
+            obstacleList.Add(body2);
             body.Add(body2);
+            obstacleList.Add(body3);
             body.Add(body3);
+            obstacleList.Add(body4);
             body.Add(body4);
+            obstacleList.Add(body5);
             body.Add(body5);
+            obstacleList.Add(body6);
             body.Add(body6);
+            obstacleList.Add(body7);
             body.Add(body7);
+            obstacleList.Add(body8);
             body.Add(body8);
+            obstacleList.Add(rear);
             body.Add(rear);
+
+            // MAKE IT SO THIS IS ITERABLE NOT HARD CODED
 
         }
 
@@ -82,7 +92,7 @@
             Console.SetCursorPosition(body4.Left, body4.Top);
             Console.BackgroundColor = Bodycolor;
             Console.Write("  ");
-          Console.ResetColor();
+            Console.ResetColor();
 
             Console.SetCursorPosition(body5.Left, body5.Top);
             Console.BackgroundColor = Bodycolor;
@@ -191,11 +201,12 @@
                 body1.Top = head.Top;
 
                 Console.BackgroundColor = ConsoleColor.Red;
-                head.Top = head.Top - 2;
+                head.Top = head.Top - 1;
                 Console.SetCursorPosition(head.Left, head.Top);
                 Console.Write("  ");
             }
-            else if (direction == "down") {
+            else if (direction == "down")
+            {
 
                 Console.SetCursorPosition(rear.Left, rear.Top);
                 Console.BackgroundColor = ConsoleColor.Black;
@@ -230,7 +241,7 @@
                 body1.Top = head.Top;
 
                 Console.BackgroundColor = ConsoleColor.Red;
-                head.Top = head.Top +2;
+                head.Top = head.Top + 1;
                 Console.SetCursorPosition(head.Left, head.Top);
                 Console.Write("  ");
             }
@@ -276,7 +287,7 @@
         }
 
 
-        public bool CheckIsDead(List<Entity> obstacleList)
+        public bool CheckIsDead()
         {
             bool result = false;
             if ((head.Top < 10 || head.Top >= 40 - 1) || (head.Left < 20 || head.Left >= 170 - 3))
@@ -299,9 +310,6 @@
 
         public static void generateArena()
         {
-            // -------------------------------------------
-            // TODO MAKE THE ARENA INCLUDED IN CHECKISDEAD
-            // -------------------------------------------
 
             //Creates areana
             int j = 0;
@@ -342,25 +350,27 @@
             // finish bottom
         }
 
-        public string GetDirection(ConsoleKeyInfo keyInfo, string currentDirection) {
-            if (keyInfo.Key == ConsoleKey.D)
+        public string GetDirection(ConsoleKeyInfo keyInfo, string currentDirection)
+        {
+            if (keyInfo.Key == ConsoleKey.D || keyInfo.Key == ConsoleKey.RightArrow)
             {
                 return "right";
 
             }
-            else if (keyInfo.Key == ConsoleKey.W)
+            else if (keyInfo.Key == ConsoleKey.W || keyInfo.Key == ConsoleKey.UpArrow)
             {
                 return "up";
             }
-            else if (keyInfo.Key == ConsoleKey.S)
+            else if (keyInfo.Key == ConsoleKey.S || keyInfo.Key == ConsoleKey.DownArrow)
             {
                 return "down";
             }
-            else if (keyInfo.Key == ConsoleKey.A)
+            else if (keyInfo.Key == ConsoleKey.A || keyInfo.Key == ConsoleKey.LeftArrow)
             {
                 return "left";
             }
-            else {
+            else
+            {
                 return currentDirection;
             }
 

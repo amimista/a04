@@ -22,8 +22,6 @@
                     obstacleList.Add(new Entity(left + (i * 2), top + j));
                 }
             }
-            Obstacle obstacle3 = new Obstacle(20, 20, 7, ConsoleColor.Blue);
-            obstacleList.Add(obstacle3);
         }
 
         /// <summary>

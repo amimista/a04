@@ -1,20 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using snake;
-using System;
-using System.Drawing;
-using System.Security.AccessControl;
-using static System.Net.Mime.MediaTypeNames;
-//Console.BufferWidth = 300;
-//Console.WindowWidth = 200;
+using System.Media;
+using System.Threading;
 
 while (true)
 {
-
-
-
     Console.SetCursorPosition(50, 5);
     Console.WriteLine("Mr Snake");
-
 
     // add music
 
@@ -49,24 +41,25 @@ while (true)
         }
     }
 
-    int top = 10;
-    int left = 20;
-    int right = 170;
-    int bottom = 40;
-
-
-
     bool running = true;
 
     Obstacle obstacle = new Obstacle(30, 30, 7, ConsoleColor.Cyan);
     obstacle.Display();
     Obstacle obstacle2 = new Obstacle(80, 30, 3, ConsoleColor.Cyan);
-
-
     obstacle2.Display();
 
+    List<Entity> allObsticles = new List<Entity>();
+    foreach (Entity entity in obstacle.ObstacleList)
+    {
+        allObsticles.Add(entity);
+    }
+    foreach (Entity entity in obstacle2.ObstacleList)
+    {
+        allObsticles.Add(entity);
+    }
 
-    Snake snake = new Snake(10, 35, 20, ConsoleColor.Red);
+
+    Snake snake = new Snake(10, 50, 20, allObsticles);
     snake.Display();
 
 
@@ -94,15 +87,16 @@ while (true)
 
 
 
-        if (snake.CheckIsDead(obstacle.ObstacleList)) break;
+        if (snake.CheckIsDead()) break;
         Thread.Sleep(100);  // (100)
         tick += .1;
 
-        if (tick % 1 == 0){
+        if (tick % 1 == 0)
+        {
 
             Obstacle obstacle3 = new Obstacle(80, 30, 3, ConsoleColor.Cyan);
             obstacle3.Display();
-          
+
         }
     }
     //Make sound
@@ -124,7 +118,7 @@ while (true)
     Console.SetCursorPosition(65, 15);
     Console.WriteLine($"click enter to play again any other key twice to exit");
 
-    
+
     ConsoleKeyInfo PressedEnter = Console.ReadKey(true);
     if (PressedEnter.Key == ConsoleKey.Enter)
     {
