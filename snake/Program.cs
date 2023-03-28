@@ -1,104 +1,147 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using snake;
-Console.SetCursorPosition(50, 5);
-Console.WriteLine("Mr Snake");
+using System;
+using System.Drawing;
+using System.Security.AccessControl;
+using static System.Net.Mime.MediaTypeNames;
+//Console.BufferWidth = 300;
+//Console.WindowWidth = 200;
 
-
-int width = Console.LargestWindowWidth;
-int height = Console.LargestWindowHeight;
-
-// Set the console window size to the size of the screen
-Console.SetWindowSize(width, height);
-Console.SetBufferSize(width, height);
-
-
-bool pressedAnyButton = false;
-while (!pressedAnyButton)
+while (true)
 {
-    Console.SetCursorPosition(3, 3);
-    Console.WriteLine("Instrutions");
-    Console.SetCursorPosition(3, 4);
-    Console.WriteLine("Use W A S D to move");
-    Console.SetCursorPosition(3, 5);
-    Console.WriteLine("Press Enter to begin");
-    ConsoleKeyInfo Pressed = Console.ReadKey(true);
 
-    if (Pressed.Key == ConsoleKey.Enter)
+
+
+    Console.SetCursorPosition(50, 5);
+    Console.WriteLine("Mr Snake");
+
+
+    // add music
+
+    int width = Console.LargestWindowWidth;
+    int height = Console.LargestWindowHeight;
+
+    // Set the console window size to the size of the screen
+    Console.SetWindowSize(width, height);
+    Console.SetBufferSize(width, height);
+
+
+    bool pressedAnyButton = false;
+    while (!pressedAnyButton)
     {
-        Console.Clear();
-        break;
+        Console.SetCursorPosition(3, 3);
+        Console.WriteLine("Instrutions");
+        Console.SetCursorPosition(3, 4);
+        Console.WriteLine("Use W A S D to move");
+        Console.SetCursorPosition(3, 5);
+        Console.WriteLine("Press Enter to begin");
+        ConsoleKeyInfo Pressed = Console.ReadKey(true);
+
+        if (Pressed.Key == ConsoleKey.Enter)
+        {
+            Console.SetCursorPosition(3, 3);
+            Console.WriteLine("           ");
+            Console.SetCursorPosition(3, 4);
+            Console.WriteLine("                          ");
+            Console.SetCursorPosition(3, 5);
+            Console.WriteLine("                            ");
+            pressedAnyButton = true;
+        }
     }
-}
 
-//int top = 10;
-//int left = 20;
-//int right = 170;
-//int bottom = 40;
-
-bool running = true;
-
-Obstacle obstacle = new Obstacle(30, 30, 7, ConsoleColor.Cyan);
-obstacle.Display();
-
-Obstacle obstacle2 = new Obstacle(80, 30, 3, ConsoleColor.Cyan);
-obstacle2.Display();
-
-Snake snake = new Snake(25, 30, 20, ConsoleColor.Red);
-snake.Display();
-
-Console.CursorVisible = false;
-double tick = 0;
-
-Snake.generateArena();
-
-//Thread.Sleep(10000);
+    int top = 10;
+    int left = 20;
+    int right = 170;
+    int bottom = 40;
 
 
-//string current = "";
-//bool moved = false;
-while (running)
-{
-    snake.Move("right");
-    //if (moved == false)
-    //{
-    //}
-    //if (Console.KeyAvailable)
-    //{
-    //    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
 
-    //    if (keyInfo.Key == ConsoleKey.D)
-    //    {
-    //        snake.Move("right");
-    //        current = "right";
-    //        moved = true;
-    //    }
-    //    else if (keyInfo.Key == ConsoleKey.W)
-    //    {
-    //        moved = true;
-    //        snake.Move("up");
-    //        current = "up";
-    //    }
-    //    else
-    //    {
-    //        snake.Move(current);
-    //    }
-    //}
+    bool running = true;
 
-    if (snake.CheckIsDead(obstacle.ObstacleList)) break;
+    Obstacle obstacle = new Obstacle(30, 30, 7, ConsoleColor.Cyan);
+    obstacle.Display();
+    Obstacle obstacle2 = new Obstacle(80, 30, 3, ConsoleColor.Cyan);
 
+
+    obstacle2.Display();
+
+
+    Snake snake = new Snake(10, 35, 20, ConsoleColor.Red);
     snake.Display();
-    Thread.Sleep(100);
-    tick += .1;
+
+
+    string currentDirection = "right";
+    Console.CursorVisible = false;
+    double tick = 0;
+
+    Snake.generateArena();
+
+
+    currentDirection = "right";
+    bool moved = false;
+
+
+
+    while (running)
+    {
+        if (Console.KeyAvailable)
+        {
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            currentDirection = snake.GetDirection(keyInfo, currentDirection);
+        }
+        snake.Move(currentDirection);
+        snake.Display();
+
+
+
+        if (snake.CheckIsDead(obstacle.ObstacleList)) break;
+        Thread.Sleep(100);  // (100)
+        tick += .1;
+
+        if (tick % 1 == 0){
+
+            Obstacle obstacle3 = new Obstacle(80, 30, 3, ConsoleColor.Cyan);
+            obstacle3.Display();
+          
+        }
+    }
+    //Make sound
+    int frequency = 440; // Frequency in Hertz (A4 note)
+    int duration = 100;   // Duration in milliseconds (0.1 second)
+    Console.Beep(frequency, duration);
+
+    Console.Clear();
+    Console.ResetColor();
+
+    Console.SetCursorPosition(70, 10);
+
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.WriteLine($"You Died, You lived for {tick}");
+
+    Console.WriteLine("");
+    Console.WriteLine("");
+    Console.WriteLine("");
+    Console.SetCursorPosition(65, 15);
+    Console.WriteLine($"click enter to play again any other key twice to exit");
+
+    
+    ConsoleKeyInfo PressedEnter = Console.ReadKey(true);
+    if (PressedEnter.Key == ConsoleKey.Enter)
+    {
+
+        Console.SetCursorPosition(65, 15);
+        Console.WriteLine("                                                ");
+        pressedAnyButton = true;
+
+    }
+    else if (PressedEnter != null)
+    {
+
+        Environment.Exit(0);
+        Environment.Exit(0);
+
+    }
+
 }
-Console.ResetColor();
-Console.Clear();
-//Console.BackgroundColor = ConsoleColor.White;
-//Console.SetCursorPosition(20, 20);
-Console.WriteLine($"You Died, You lived for {Math.Floor(tick)}s");
-
-//Console.Clear();
-Console.ResetColor();
-Console.ForegroundColor = ConsoleColor.DarkGray;
-
 
 

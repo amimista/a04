@@ -60,7 +60,7 @@
 
             Console.SetCursorPosition(head.Left, head.Top);
             Console.BackgroundColor = ConsoleColor.Red;
-            Console.Write("  ");
+            Console.Write(" ");
             Console.ResetColor();
 
             Console.SetCursorPosition(body1.Left, body1.Top);
@@ -71,6 +71,7 @@
             Console.SetCursorPosition(body2.Left, body2.Top);
             Console.BackgroundColor = Bodycolor;
             Console.Write("  ");
+
             Console.ResetColor();
 
             Console.SetCursorPosition(body3.Left, body3.Top);
@@ -81,7 +82,7 @@
             Console.SetCursorPosition(body4.Left, body4.Top);
             Console.BackgroundColor = Bodycolor;
             Console.Write("  ");
-            Console.ResetColor();
+          Console.ResetColor();
 
             Console.SetCursorPosition(body5.Left, body5.Top);
             Console.BackgroundColor = Bodycolor;
@@ -97,13 +98,13 @@
 
             Console.SetCursorPosition(body7.Left, body7.Top);
             Console.BackgroundColor = Bodycolor;
-            Console.Write("  ");
+            Console.Write(" ");
             Console.ResetColor();
 
 
             Console.SetCursorPosition(body8.Left, body8.Top);
             Console.BackgroundColor = Bodycolor;
-            Console.Write("  ");
+            Console.Write(" ");
             Console.ResetColor();
 
             Console.SetCursorPosition(rear.Left, rear.Top);
@@ -153,9 +154,125 @@
                 Console.BackgroundColor = ConsoleColor.Red;
                 head.Left = head.Left + 2;
                 Console.SetCursorPosition(head.Left, head.Top);
-                Console.Write("   ");
+                Console.Write("  ");
             }
-            // MAKE THE OTHER STUFF :)
+            else if (direction == "up")
+            {
+                Console.SetCursorPosition(rear.Left, rear.Top);
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.WriteLine("  ");
+                Console.BackgroundColor = ConsoleColor.Green;
+                rear.Left = body8.Left;
+                rear.Top = body8.Top;
+
+                body8.Left = body7.Left;
+                body8.Top = body7.Top;
+
+                body7.Left = body6.Left;
+                body7.Top = body6.Top;
+
+                body6.Left = body5.Left;
+                body6.Top = body5.Top;
+
+                body5.Left = body4.Left;
+                body5.Top = body4.Top;
+
+                body4.Left = body3.Left;
+                body4.Top = body3.Top;
+
+                body3.Left = body2.Left;
+                body3.Top = body2.Top;
+
+                body2.Left = head.Left;
+                body2.Top = head.Top;
+
+
+                body1.Left = head.Left;
+                body1.Top = head.Top;
+
+                Console.BackgroundColor = ConsoleColor.Red;
+                head.Top = head.Top - 2;
+                Console.SetCursorPosition(head.Left, head.Top);
+                Console.Write("  ");
+            }
+            else if (direction == "down") {
+
+                Console.SetCursorPosition(rear.Left, rear.Top);
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.WriteLine("  ");
+                Console.BackgroundColor = ConsoleColor.Green;
+                rear.Left = body8.Left;
+                rear.Top = body8.Top;
+
+                body8.Left = body7.Left;
+                body8.Top = body7.Top;
+
+                body7.Left = body6.Left;
+                body7.Top = body6.Top;
+
+                body6.Left = body5.Left;
+                body6.Top = body5.Top;
+
+                body5.Left = body4.Left;
+                body5.Top = body4.Top;
+
+                body4.Left = body3.Left;
+                body4.Top = body3.Top;
+
+                body3.Left = body2.Left;
+                body3.Top = body2.Top;
+
+                body2.Left = head.Left;
+                body2.Top = head.Top;
+
+
+                body1.Left = head.Left;
+                body1.Top = head.Top;
+
+                Console.BackgroundColor = ConsoleColor.Red;
+                head.Top = head.Top +2;
+                Console.SetCursorPosition(head.Left, head.Top);
+                Console.Write("  ");
+            }
+            else if (direction == "left")
+            {
+                Console.SetCursorPosition(rear.Left, rear.Top);
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.WriteLine("  ");
+                Console.BackgroundColor = ConsoleColor.Green;
+                rear.Left = body8.Left;
+                rear.Top = body8.Top;
+
+                body8.Left = body7.Left;
+                body8.Top = body7.Top;
+
+                body7.Left = body6.Left;
+                body7.Top = body6.Top;
+
+                body6.Left = body5.Left;
+                body6.Top = body5.Top;
+
+                body5.Left = body4.Left;
+                body5.Top = body4.Top;
+
+                body4.Left = body3.Left;
+                body4.Top = body3.Top;
+
+                body3.Left = body2.Left;
+                body3.Top = body2.Top;
+
+                body2.Left = head.Left;
+                body2.Top = head.Top;
+
+
+                body1.Left = head.Left;
+                body1.Top = head.Top;
+
+                Console.BackgroundColor = ConsoleColor.Red;
+                head.Left = head.Left + -2;
+                Console.SetCursorPosition(head.Left, head.Top);
+                Console.Write("  ");
+            }
         }
 
 
@@ -223,6 +340,31 @@
                 l++;
             }
             // finish bottom
+        }
+
+        public string GetDirection(ConsoleKeyInfo keyInfo, string currentDirection) {
+            if (keyInfo.Key == ConsoleKey.D)
+            {
+                return "right";
+
+            }
+            else if (keyInfo.Key == ConsoleKey.W)
+            {
+                return "up";
+            }
+            else if (keyInfo.Key == ConsoleKey.S)
+            {
+                return "down";
+            }
+            else if (keyInfo.Key == ConsoleKey.A)
+            {
+                return "left";
+            }
+            else {
+                return currentDirection;
+            }
+
+
         }
     }
 }
