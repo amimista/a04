@@ -5,7 +5,7 @@
     /// </summary>
     public class Obstacle
     {
-        private List<Entity> obstacleList;
+        public List<Entity> obstacleList;
 
         private ConsoleColor color;
 
@@ -22,6 +22,9 @@
                     obstacleList.Add(new Entity(left + (i * 2), top + j));
                 }
             }
+
+            
+
         }
 
         /// <summary>
