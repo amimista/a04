@@ -1,141 +1,131 @@
-﻿// See https://aka.ms/new-console-template for more information
-using snake;
-using System.Media;
-using System.Threading;
+﻿using System.Media;
 
-while (true)
+namespace snake
 {
-    Console.SetCursorPosition(50, 5);
-    Console.WriteLine("Mr Snake");
-
-    // add music
-
-    int width = Console.LargestWindowWidth;
-    int height = Console.LargestWindowHeight;
-
-    // Set the console window size to the size of the screen
-    Console.SetWindowSize(width, height);
-    Console.SetBufferSize(width, height);
-
-
-    bool pressedAnyButton = false;
-    while (!pressedAnyButton)
+    /// <summary>
+    /// Main game program with game setup and utilities.
+    /// </summary>
+    /// <author>Marcus + Tyson</author>
+    class Program
     {
-        Console.SetCursorPosition(3, 3);
-        Console.WriteLine("Instrutions");
-        Console.SetCursorPosition(3, 4);
-        Console.WriteLine("Use W A S D to move");
-        Console.SetCursorPosition(3, 5);
-        Console.WriteLine("Press Enter to begin");
-        ConsoleKeyInfo Pressed = Console.ReadKey(true);
+        private static Board board;
+        private static Timer? timer;
+        private static int elapsedTime;
+        private static bool running = true;
 
-        if (Pressed.Key == ConsoleKey.Enter)
+        static void Main(string[] args)
         {
-            Console.SetCursorPosition(3, 3);
-            Console.WriteLine("           ");
-            Console.SetCursorPosition(3, 4);
-            Console.WriteLine("                          ");
-            Console.SetCursorPosition(3, 5);
-            Console.WriteLine("                            ");
-            pressedAnyButton = true;
+            Console.CursorVisible = false;
+
+            // MAIN TITLE
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("""
+  __  __         _____             _        
+ |  \/  |       / ____|           | |       
+ | \  / |_ __  | (___  _ __   __ _| | _____ 
+ | |\/| | '__|  \___ \| '_ \ / _` | |/ / _ \
+ | |  | | |_    ____) | | | | (_| |   <  __/
+ |_|  |_|_(_)  |_____/|_| |_|\__,_|_|\_\___|
+                                            
+                                            
+""");
+
+            board = new Board();
+
+            // INSTRUCTIONS
+            Console.SetCursorPosition(5, 8);
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Press enter to start...");
+            while (Console.ReadKey(true).Key != ConsoleKey.Enter)
+            {
+                // waiting until enter is presed
+            }
+
+            Console.SetCursorPosition(5, 8);
+            Console.ResetColor();
+            Console.WriteLine(new string(' ', "Press enter to start...".Length)); // overwriting the instructions
+            
+            do // MAIN GAME LOOP
+            {
+                NewGame();
+                Console.SetCursorPosition(5, 8);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("Press enter twice to play again. Press anything else twice to quit.");
+            } while (Console.ReadKey().Key == ConsoleKey.Enter);
+
+            Console.Clear();
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+        }
+
+        private static void NewGame()
+        {
+            board = new Board();
+            timer = new Timer(
+                callback: TimerCallback,
+                state: null,
+                dueTime: 0,
+                period: 1000);
+
+            running = true;
+            elapsedTime = 0;
+            Thread inputThread = new Thread(DirectionKeyChangeListener); // separating the game from the inputs
+            inputThread.Start();
+
+            // COLLISION CHECK
+            while (!board.DetectCollision(board.Snake.MoveSnake()))
+            {
+                Thread.Sleep(board.Snake.Vel);
+            }
+
+            running = false;
+
+            Console.SetCursorPosition(board.Width + 5 - $"You survived {elapsedTime} seconds".Length, 8);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"You survived {elapsedTime} seconds");
+            timer.Dispose();
+
+            try
+            {
+                Console.Beep(1234, 100);
+            }
+            catch (PlatformNotSupportedException) { }
+        }
+
+        private static void TimerCallback(Object o)
+        {
+            elapsedTime++;
+
+            if (elapsedTime % 10 == 0)
+            {
+                board.GenObstacles(5);
+            }
+        }
+
+        static void DirectionKeyChangeListener()
+        {
+            while (running)
+            {
+                ConsoleKey key = Console.ReadKey(true).Key;
+                if (key == ConsoleKey.RightArrow || key == ConsoleKey.D)
+                {
+                    board.Snake.Direction = Direction.Right;
+                }
+                else if (key == ConsoleKey.LeftArrow || key == ConsoleKey.A)
+                {
+                    board.Snake.Direction = Direction.Left;
+                }
+                else if (key == ConsoleKey.UpArrow || key == ConsoleKey.W)
+                {
+                    board.Snake.Direction = Direction.Up;
+                }
+                else if (key == ConsoleKey.DownArrow || key == ConsoleKey.S)
+                {
+                    board.Snake.Direction = Direction.Down;
+                }
+            }
         }
     }
-
-    bool running = true;
-
-    Obstacle obstacle = new Obstacle(30, 30, 7, ConsoleColor.Cyan);
-    obstacle.Display();
-    Obstacle obstacle2 = new Obstacle(80, 30, 3, ConsoleColor.Cyan);
-    obstacle2.Display();
-
-    List<Entity> allObsticles = new List<Entity>();
-    foreach (Entity entity in obstacle.ObstacleList)
-    {
-        allObsticles.Add(entity);
-    }
-    foreach (Entity entity in obstacle2.ObstacleList)
-    {
-        allObsticles.Add(entity);
-    }
-
-
-    Snake snake = new Snake(10, 50, 20, allObsticles);
-    snake.Display();
-
-
-    string currentDirection = "right";
-    Console.CursorVisible = false;
-    double tick = 0;
-
-    Snake.generateArena();
-
-
-    currentDirection = "right";
-    bool moved = false;
-
-
-
-    while (running)
-    {
-        if (Console.KeyAvailable)
-        {
-            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-            currentDirection = snake.GetDirection(keyInfo, currentDirection);
-        }
-        snake.Move(currentDirection);
-        snake.Display();
-
-
-
-        if (snake.CheckIsDead()) break;
-        Thread.Sleep(100);  // (100)
-        tick += .1;
-
-        if (tick % 1 == 0)
-        {
-
-            Obstacle obstacle3 = new Obstacle(80, 30, 3, ConsoleColor.Cyan);
-            obstacle3.Display();
-
-        }
-    }
-    //Make sound
-    int frequency = 440; // Frequency in Hertz (A4 note)
-    int duration = 100;   // Duration in milliseconds (0.1 second)
-    Console.Beep(frequency, duration);
-
-    Console.Clear();
-    Console.ResetColor();
-
-    Console.SetCursorPosition(70, 10);
-
-    Console.ForegroundColor = ConsoleColor.DarkGray;
-    Console.WriteLine($"You Died, You lived for {tick}");
-
-    Console.WriteLine("");
-    Console.WriteLine("");
-    Console.WriteLine("");
-    Console.SetCursorPosition(65, 15);
-    Console.WriteLine($"click enter to play again any other key twice to exit");
-
-
-    ConsoleKeyInfo PressedEnter = Console.ReadKey(true);
-    if (PressedEnter.Key == ConsoleKey.Enter)
-    {
-
-        Console.SetCursorPosition(65, 15);
-        Console.WriteLine("                                                ");
-        pressedAnyButton = true;
-
-    }
-    else if (PressedEnter != null)
-    {
-
-        Environment.Exit(0);
-        Environment.Exit(0);
-
-    }
-
 }
-
-

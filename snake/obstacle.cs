@@ -1,43 +1,107 @@
-﻿namespace snake
+﻿using System.Drawing;
+
+namespace snake
 {
     /// <summary>
-    /// Representation of multiple <see cref="Entity"/> that make an obstacle in the game. Used in tandem with <see cref="Snake"/>.
+    /// Representation and Display of obstacles in the game
     /// </summary>
-    public class Obstacle
+    /// <author>Marcus W + Tyson</author>
+    class Obstacle
     {
-        private List<Entity> obstacleList;
+        private static List<Point> obsPositions = new List<Point>();
 
-        private ConsoleColor color;
+        public List<Point> Positions { get; }
 
-        public List<Entity> ObstacleList { get { return obstacleList; } set { obstacleList = value; } }
-
-        public Obstacle(int left, int top, int size, ConsoleColor color)
-        {
-            this.color = color;
-            obstacleList = new List<Entity>();
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    obstacleList.Add(new Entity(left + (i * 2), top + j));
-                }
-            }
-        }
+        private static Random rand = new Random();
 
         /// <summary>
-        /// Displays the representation of multiple entitys as a single shape in the console.
+        /// Creates the data behind an obstacle.
         /// </summary>
-        public void Display()
+        /// <param name="w">Width of the play area</param>
+        /// <param name="h">Height of the play area</param>
+        public Obstacle(int w, int h)
         {
-            foreach (Entity e in obstacleList)
+            bool isCollide;
+            Point point;
+            do
             {
-                Console.SetCursorPosition(e.Left, e.Top);
-                Console.BackgroundColor = color;
-                Console.Write("  ");
-                Console.ResetColor();
+                isCollide = false;
+                //                              leftMargin        topMargin
+                point = new Point(rand.Next(w - 4), rand.Next(h - 9));
+                foreach (Point pos in obsPositions)
+                {
+                    if (pos.X <= point.X && pos.X >= point.X - 6 &&
+                        pos.Y <= point.Y && pos.Y >= point.Y - 3) // making sure obstacles don't come within a certain distance of each other.
+                    {
+                        isCollide |= true; // logical or operator. Saw this with intellicode, evaluates to `isCollide = isCollide || true;`. So it basically does isCollide = true; none the less.
+                    }
+                }
+            } while (isCollide);
+
+            obsPositions.Add(point);
+
+            Positions = new List<Point>();
+
+            int obsType = rand.Next(4);
+
+            if (obsType == 0)
+            {
+                createShapeT(point);
+            }
+            else if (obsType == 1)
+            {
+                createShapeSkew(point);
+            }
+            else if (obsType == 2)
+            {
+                createShapeBlock(point);
+            }
+            else
+            {
+                createShapeL(point);
             }
 
+            foreach (Point pos in Positions)
+            {
+                Board.PrintSquare(pos, ConsoleColor.Cyan);
+            }
         }
 
+        public void destroyObstacle()
+        {
+            foreach (Point pos in Positions)
+            {
+                obsPositions.Remove(pos); // removing from the list
+                Board.PrintSquare(pos, ConsoleColor.DarkBlue); // overwriting the console "pixel"
+            }
+        }
+
+        private void createShapeT(Point p)
+        {
+            Positions.Add(new Point(p.X, p.Y + 1));
+            Positions.Add(new Point(p.X + 2, p.Y + 1));
+            Positions.Add(new Point(p.X, p.Y + 2));
+        }
+
+        private void createShapeSkew(Point p)
+        {
+            Positions.Add(new Point(p.X + 2, p.Y));
+            Positions.Add(new Point(p.X + 2, p.Y + 1));
+            Positions.Add(new Point(p.X + 4, p.Y + 1));
+        }
+
+        private void createShapeBlock(Point p)
+        {
+            Positions.Add(new Point(p.X + 2, p.Y));
+            Positions.Add(new Point(p.X + 2, p.Y + 1));
+            Positions.Add(new Point(p.X, p.Y + 1));
+        }
+
+        private void createShapeL(Point p)
+        {
+            Positions.Add(new Point(p.X, p.Y + 1));
+            Positions.Add(new Point(p.X + 2, p.Y + 2));
+            Positions.Add(new Point(p.X, p.Y + 2));
+        }
     }
 }
