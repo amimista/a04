@@ -71,7 +71,7 @@ while (true)
 
 
     currentDirection = "right";
-    bool moved = false;
+    
 
 
 
@@ -124,7 +124,7 @@ while (true)
     {
 
         Console.SetCursorPosition(65, 15);
-        Console.WriteLine("                                                ");
+        Console.WriteLine("                                                       ");
         pressedAnyButton = true;
 
     }
@@ -132,7 +132,7 @@ while (true)
     {
 
         Environment.Exit(0);
-        Environment.Exit(0);
+        
 
     }
 

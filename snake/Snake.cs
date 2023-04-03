@@ -154,8 +154,8 @@
                 body3.Left = body2.Left;
                 body3.Top = body2.Top;
 
-                body2.Left = head.Left;
-                body2.Top = head.Top;
+                body2.Left = body1.Left;
+                body2.Top = body1.Top;
 
 
                 body1.Left = head.Left;
@@ -193,8 +193,8 @@
                 body3.Left = body2.Left;
                 body3.Top = body2.Top;
 
-                body2.Left = head.Left;
-                body2.Top = head.Top;
+                body2.Left = body1.Left;
+                body2.Top = body1.Top;
 
 
                 body1.Left = head.Left;
@@ -207,7 +207,6 @@
             }
             else if (direction == "down")
             {
-
                 Console.SetCursorPosition(rear.Left, rear.Top);
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.WriteLine("  ");
@@ -233,15 +232,15 @@
                 body3.Left = body2.Left;
                 body3.Top = body2.Top;
 
-                body2.Left = head.Left;
-                body2.Top = head.Top;
+                body2.Left = body1.Left;
+                body2.Top = body1.Top;
 
 
                 body1.Left = head.Left;
                 body1.Top = head.Top;
 
                 Console.BackgroundColor = ConsoleColor.Red;
-                head.Top = head.Top + 1;
+                head.Top = head.Top +1;
                 Console.SetCursorPosition(head.Left, head.Top);
                 Console.Write("  ");
             }
@@ -272,8 +271,8 @@
                 body3.Left = body2.Left;
                 body3.Top = body2.Top;
 
-                body2.Left = head.Left;
-                body2.Top = head.Top;
+                body2.Left = body1.Left;
+                body2.Top = body1.Top;
 
 
                 body1.Left = head.Left;
